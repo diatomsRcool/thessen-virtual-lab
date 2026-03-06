@@ -580,3 +580,145 @@ Physical specimens stored at Arizona State University:
 - API Documentation: https://data.neonscience.org/data-api
 - neonUtilities: https://cran.r-project.org/package=neonUtilities
 - Data Tutorials: https://www.neonscience.org/resources/learning-hub/tutorials
+
+---
+
+## Knowledge Base: Biological Collections Ontology (BCO)
+
+You are an expert in the **BCO** for semantically describing biodiversity specimens and samples.
+
+### What is the BCO?
+
+The Biological Collections Ontology (BCO) is an application ontology that supports interoperability of biodiversity data across:
+- Museum collections
+- Environmental/metagenomic samples
+- Ecological surveys
+
+It provides semantic precision beyond what Darwin Core offers, distinguishing between physical samples, observing processes, and data about those entities.
+
+### Why BCO?
+
+Darwin Core (DwC) conflates specimens and observations into a single "Occurrence" category. BCO provides clearer semantics:
+
+| DwC Limitation | BCO Solution |
+|----------------|--------------|
+| `dwc:Occurrence` mixes specimens & observations | Separate `MaterialSample` vs `ObservingProcess` |
+| Ambiguous sample relationships | Explicit `specimen`, `lot`, `voucher` distinctions |
+| Limited process modeling | Full sampling process representation |
+
+### Core Concepts
+
+#### Material Sample
+A physical entity that is the output of a material sampling process.
+
+**Examples**:
+- Preserved museum specimen (tick voucher)
+- Tissue sample for DNA extraction
+- Environmental water sample
+- Herbarium sheet
+
+**Key Principle**: Entities become "samples" by participating in a structured collecting process.
+
+#### Material Sampling Process
+
+Three component activities:
+1. **Selection** - Choosing what to sample
+2. **Physical Extraction** - Removing material from environment
+3. **Submission** - Formal accessioning into a collection
+
+#### Observing Process
+
+Produces information (not physical material):
+- Field observations without voucher collection
+- Measurements and counts
+- Photographic records
+
+### Key Classes
+
+| Class | Description | Example |
+|-------|-------------|---------|
+| **BCO:MaterialSample** | Physical specimen or sample | Tick specimen in ethanol |
+| **BCO:Organism** | Individual living thing | The tick that was collected |
+| **BCO:VoucherSpecimen** | Sample that documents occurrence | Type specimen |
+| **BCO:Lot** | Group of specimens from same event | Batch of larvae from one drag |
+| **BCO:MaterialSamplingProcess** | The collection activity | Drag cloth sampling event |
+| **BCO:ObservingProcess** | Non-collecting observation | Visual tick count |
+
+### Key Properties
+
+| Property | Domain | Description |
+|----------|--------|-------------|
+| **collector** | MaterialSamplingProcess | Who performed collection |
+| **location** | Process | Where sampling occurred |
+| **time** | Process | When sampling occurred |
+| **storageEnvironment** | MaterialSample | How sample is preserved |
+| **container** | MaterialSample | Physical housing |
+| **institution** | MaterialSample | Holding institution |
+| **collectionIdentifier** | MaterialSample | Catalog/accession number |
+
+### BCO + Darwin Core
+
+BCO complements Darwin Core by providing semantic depth:
+
+```
+dwc:Occurrence
+    ├── BCO:MaterialSample (physical specimen)
+    │       ├── BCO:VoucherSpecimen
+    │       ├── BCO:Lot
+    │       └── BCO:EnvironmentalSample
+    └── BCO:ObservingProcess (observation only)
+```
+
+The term `dwctype:MaterialSample` was added to Darwin Core based on BCO recommendations.
+
+### BCO + Other Ontologies
+
+BCO integrates with the OBO ecosystem:
+
+| Ontology | Integration |
+|----------|-------------|
+| **OBI** | Specimen and investigation concepts |
+| **ENVO** | Environmental context of samples |
+| **NCBITaxon** | Taxonomic identity |
+| **UBERON** | Anatomical source of tissue |
+| **IAO** | Information artifacts about specimens |
+| **BFO** | Upper-level ontology alignment |
+
+### Use Cases for Virtual Lab
+
+1. **Tick Specimen Tracking**
+   - Link field collection → lab processing → biorepository
+   - Distinguish vouchers from bulk samples
+
+2. **NEON Biorepository Integration**
+   - Map NEON sample types to BCO classes
+   - Enable cross-collection queries
+
+3. **Sample-to-Sequence Provenance**
+   - Track material from collection to DNA extraction to sequence
+   - Support reproducibility of molecular studies
+
+### Example: Tick Collection Event
+
+```
+BCO:MaterialSamplingProcess
+  ├── collector: "Field Technician A"
+  ├── location: ENVO:forest biome
+  ├── time: 2024-06-15
+  ├── method: BCO:DragClothSampling
+  └── outputs:
+      ├── BCO:Lot (larvae batch)
+      │     └── count: 45
+      └── BCO:VoucherSpecimen (adult female)
+            ├── storageEnvironment: 95% ethanol
+            ├── institution: NEON Biorepository
+            └── collectionIdentifier: NEON.TICK.2024.00123
+```
+
+### Resources
+
+- OBO Foundry: https://obofoundry.org/ontology/bco.html
+- GitHub: https://github.com/BiodiversityOntologies/bco
+- BioPortal: https://bioportal.bioontology.org/ontologies/BCO
+- PURL: http://purl.obolibrary.org/obo/bco.owl
+- Paper: Walls et al. (2014) PLOS ONE - "Semantics in Support of Biodiversity Knowledge Discovery"

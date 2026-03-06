@@ -96,3 +96,117 @@ enums:
 
 - Documentation: https://linkml.io/
 - GitHub: https://github.com/linkml/linkml
+
+---
+
+## Knowledge Base: NEON Data
+
+You are an expert in accessing and analyzing **NEON** (National Ecological Observatory Network) data programmatically.
+
+### What is NEON?
+
+NEON is a continental-scale ecological observation facility providing free, open data from 81 field sites across the United States. It offers 182+ standardized data products with API access for reproducible bioinformatics workflows.
+
+### Data Access Methods
+
+#### neonUtilities (R)
+
+```r
+library(neonUtilities)
+
+# Download tick data
+ticks <- loadByProduct(
+  dpID = "DP1.10093.001",
+  site = c("HARV", "SCBI"),
+  startdate = "2020-01",
+  enddate = "2023-12"
+)
+
+# Access tables
+tick_field <- ticks$tck_fielddata
+tick_taxonomy <- ticks$tck_taxonomyProcessed
+```
+
+**Key Functions**:
+- `loadByProduct()` - Download, stack, and load data
+- `zipsByProduct()` - Download ZIP files for later processing
+- `stackByTable()` - Merge site-month files
+- `getTaxonTable()` - Get taxonomic reference tables
+
+#### API (Python/curl)
+
+```python
+import requests
+
+# Get data product info
+url = "https://data.neonscience.org/api/v0/products/DP1.10093.001"
+response = requests.get(url)
+product = response.json()
+
+# Get available sites and dates
+sites = product['data']['siteCodes']
+```
+
+### Key Data Products for Tick Research
+
+| Product | ID | Bioinformatics Use |
+|---------|-----|-------------------|
+| **Tick abundance** | DP1.10093.001 | Population dynamics modeling |
+| **Tick pathogens** | DP1.10092.001 | Pathogen prevalence analysis |
+| **Small mammals** | DP1.10072.001 | Host-pathogen modeling |
+| **Soil microbiome** | DP1.10108.001 | Environmental microbiome |
+
+### Tick Pathogen Data (DP1.10092.001)
+
+Pathogen testing results for:
+- *Borrelia burgdorferi*, *B. mayonii*, *B. miyamotoi*
+- *Anaplasma phagocytophilum*
+- *Babesia microti*
+- *Ehrlichia* spp.
+- *Rickettsia* spp.
+
+**Data Fields**:
+- `testPathogenName` - Pathogen tested
+- `testResult` - Positive/Negative
+- `testMethod` - PCR method used
+- `batchID` - Lab batch for QC
+
+### Biorepository Samples
+
+Physical specimens available for molecular analysis:
+- **API**: https://biorepo.neonscience.org/portal/api/v2/
+- Archived DNA and tissue samples
+- Specimen vouchers with chain of custody
+
+```python
+# Query biorepository
+biorepo_url = "https://biorepo.neonscience.org/portal/api/v2/occurrence"
+params = {"collectioncode": "NEON", "taxon": "Ixodes"}
+```
+
+### Data Integration Patterns
+
+**Linking Tables by Identifiers**:
+```
+siteID → plotID → collectDate → sampleID
+```
+
+**Joining Tick + Mammal Data**:
+```r
+# Both products share plotID and collectDate
+merged <- merge(tick_data, mammal_data,
+                by = c("siteID", "plotID", "collectDate"))
+```
+
+### Derived Data Packages
+
+- **neonDivData**: Standardized NEON organismal data for biodiversity research
+- Pre-cleaned tick, mammal, bird, and other taxonomic datasets
+- Ready for statistical modeling
+
+### Resources
+
+- NEON Data Portal: https://data.neonscience.org/
+- API Documentation: https://data.neonscience.org/data-api
+- neonUtilities CRAN: https://cran.r-project.org/package=neonUtilities
+- Biorepository: https://biorepo.neonscience.org/
