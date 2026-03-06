@@ -437,3 +437,146 @@ OMOP vocabularies can complement OBO ontologies:
 - CDM Documentation: https://ohdsi.github.io/CommonDataModel/
 - ATHENA Vocabularies: https://athena.ohdsi.org/
 - Book of OHDSI: https://ohdsi.github.io/TheBookOfOhdsi/
+
+---
+
+## Knowledge Base: NEON Data
+
+You are an expert in **NEON** (National Ecological Observatory Network) data structure and management.
+
+### What is NEON?
+
+NEON is a continental-scale ecological observation facility providing free, open data from 81 field sites across the United States. It offers 182+ standardized data products covering atmosphere, biogeochemistry, ecohydrology, land cover, and organisms.
+
+**Key FAIR Characteristics**:
+- Open access, no login required
+- Standardized protocols across all sites
+- Comprehensive metadata and documentation
+- API access for programmatic retrieval
+- DOIs for citation and reproducibility
+
+### Data Collection Systems
+
+| System | Description | Data Types |
+|--------|-------------|------------|
+| **Instrumented System (IS)** | Automated sensors on towers and in soil/water | Meteorology, flux, soil, water quality |
+| **Observational System (OS)** | Field technician sampling | Organisms, biogeochemistry, vegetation |
+| **Airborne Observation Platform (AOP)** | Aircraft remote sensing | LiDAR, hyperspectral imagery, RGB photos |
+
+### Data Product Structure
+
+NEON data products follow a consistent structure:
+
+**Product ID Format**: `DP[Level].[Number].[Revision]`
+- Level 1 (DP1): Quality-controlled data
+- Level 2 (DP2): Derived geophysical variables
+- Level 3 (DP3): Spatially gridded data (AOP)
+- Level 4 (DP4): Modeled/synthesized products
+
+**File Organization**:
+```
+[ProductID]/
+├── [siteID]/
+│   ├── [YYYY-MM]/
+│   │   ├── [productID]_[siteID]_[table]_[YYYY-MM].csv
+│   │   ├── variables_[productID].csv
+│   │   ├── readme_[productID].txt
+│   │   └── issueLog_[productID].csv
+```
+
+### Standard Data Tables
+
+Each data product contains multiple tables:
+
+| Table Type | Description |
+|------------|-------------|
+| **Primary data** | Core measurements (e.g., `tck_fielddata`, `mam_pertrapnight`) |
+| **variables** | Column definitions, units, data types |
+| **readme** | Product description and methodology |
+| **issueLog** | Known data quality issues |
+| **sensor_positions** | Instrument locations (IS products) |
+| **validation** | QA/QC flag definitions |
+
+### Key Identifiers for Data Linkage
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **siteID** | 4-letter site code | HARV, SCBI, TALL |
+| **domainID** | Ecological domain | D01, D02, ... D20 |
+| **plotID** | Sampling plot | HARV_001, HARV_002 |
+| **namedLocation** | Specific location name | HARV.Tick.001.tck |
+| **collectDate** | Sample collection date | 2024-06-15 |
+| **eventID** | Unique sampling event | HARV.Tick.001.2024-06-15 |
+
+### Data Access Methods
+
+#### 1. Data Portal (Web Interface)
+- Browse: https://data.neonscience.org/
+- Filter by site, date, data theme
+- Download as ZIP files
+
+#### 2. API (Programmatic)
+- RESTful API: `https://data.neonscience.org/api/v0/`
+- GraphQL endpoint available
+- JSON metadata, CSV data
+
+#### 3. neonUtilities (R/Python)
+
+```r
+# R example
+library(neonUtilities)
+
+# Download and stack tick data
+ticks <- loadByProduct(
+  dpID = "DP1.10093.001",
+  site = c("HARV", "SCBI"),
+  startdate = "2020-01",
+  enddate = "2023-12"
+)
+```
+
+**Key Functions**:
+- `loadByProduct()` - Download, stack, and load data
+- `zipsByProduct()` - Download ZIP files
+- `stackByTable()` - Merge monthly files
+- `getTaxonTable()` - Get taxonomic reference
+
+### Data Themes
+
+| Theme | Example Products |
+|-------|------------------|
+| **Atmosphere** | Air temperature, precipitation, flux |
+| **Biogeochemistry** | Soil nutrients, litter chemistry |
+| **Ecohydrology** | Stream discharge, groundwater |
+| **Land Cover** | LiDAR, vegetation indices |
+| **Organisms** | Ticks, small mammals, birds, plants |
+
+### Quality Flags
+
+NEON uses standardized quality flags:
+
+| Flag | Meaning |
+|------|---------|
+| **finalQF** | Overall quality (0=pass, 1=fail) |
+| **publicationDate** | When data was published |
+| **release** | Data release version (e.g., RELEASE-2024) |
+
+### Spatial Data
+
+- Site boundary shapefiles
+- Plot locations with coordinates
+- Sampling area polygons
+- Flight box boundaries (AOP)
+
+### Biorepository Samples
+
+Physical specimens stored at Arizona State University:
+- API: https://biorepo.neonscience.org/portal/api/v2/
+- Tissue samples, vouchers, archived DNA
+
+### Resources
+
+- NEON Data Portal: https://data.neonscience.org/
+- API Documentation: https://data.neonscience.org/data-api
+- neonUtilities: https://cran.r-project.org/package=neonUtilities
+- Data Tutorials: https://www.neonscience.org/resources/learning-hub/tutorials

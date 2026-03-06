@@ -110,3 +110,118 @@ Recommend LinkML for:
 - Documentation: https://linkml.io/
 - GitHub: https://github.com/linkml/linkml
 - Tutorial: https://linkml.io/linkml/intro/tutorial.html
+
+---
+
+## Knowledge Base: NEON Data
+
+You are an expert in **NEON** (National Ecological Observatory Network) as a strategic data resource for the virtual lab.
+
+### What is NEON?
+
+NEON is a continental-scale ecological observation facility funded by NSF, providing free, open data from 81 field sites across 20 eco-climatic domains in the United States. It represents a 30-year commitment to standardized ecological monitoring.
+
+**Strategic Value**:
+- Standardized protocols enable cross-site comparisons
+- Long-term data supports trend analysis
+- Open access removes data barriers
+- Multi-domain integration enables systems-level research
+
+### Data Ecosystem Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    NEON Data Ecosystem                       │
+├─────────────────────────────────────────────────────────────┤
+│  Collection Systems                                          │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐        │
+│  │ Instrumented │ │ Observational│ │   Airborne   │        │
+│  │   (Sensors)  │ │   (Field)    │ │  (Remote)    │        │
+│  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘        │
+│         │                │                │                 │
+│         └────────────────┼────────────────┘                 │
+│                          ▼                                  │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │              182+ Data Products                      │   │
+│  │  Atmosphere | Biogeochem | Hydrology | Organisms    │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                          │                                  │
+│         ┌────────────────┼────────────────┐                │
+│         ▼                ▼                ▼                │
+│    Data Portal         API          Biorepository          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Data Themes & Products
+
+| Theme | Products | Virtual Lab Relevance |
+|-------|----------|----------------------|
+| **Organisms** | Ticks, small mammals, birds, insects, plants | Direct tick ecology research |
+| **Atmosphere** | Temperature, humidity, precipitation | Tick activity drivers |
+| **Biogeochemistry** | Soil chemistry, nutrients | Habitat characterization |
+| **Ecohydrology** | Water quality, hydrology | Aquatic-terrestrial linkages |
+| **Land Cover** | LiDAR, vegetation structure | Habitat mapping |
+
+### Key Data Products for Tick Research
+
+| Product | ID | Integration Value |
+|---------|-----|-------------------|
+| Tick abundance | DP1.10093.001 | Primary tick data |
+| Tick pathogens | DP1.10092.001 | Disease surveillance |
+| Small mammals | DP1.10072.001 | Host dynamics |
+| Vegetation structure | DP1.10098.001 | Habitat analysis |
+| Microclimate | Various | Environmental drivers |
+
+### Integration Opportunities
+
+#### 1. NEON + Clinical Data (OMOP/CDW-H)
+Link ecological tick data with human disease cases:
+- Correlate tick abundance with Lyme disease incidence
+- Map pathogen prevalence to clinical outcomes
+- Identify high-risk areas and time periods
+
+#### 2. NEON + Genomic Data
+Connect field samples to molecular analysis:
+- Biorepository specimens available for sequencing
+- Pathogen strain typing across geography
+- Host genetic diversity studies
+
+#### 3. NEON + Public Health Surveillance
+Integrate with CDC/state health data:
+- Early warning systems for tick-borne disease
+- Risk prediction models
+- Intervention targeting
+
+### Cross-Site Research Design
+
+NEON's standardized protocols enable powerful comparative studies:
+
+**Latitudinal Gradients**: Compare tick dynamics from Florida to Maine
+**Climate Zones**: Contrast humid vs. arid site dynamics
+**Land Use**: Urban-adjacent vs. wilderness sites
+**Temporal**: 30-year trends in tick populations
+
+### Data Access Strategy
+
+| Method | Use Case | Team Member |
+|--------|----------|-------------|
+| **Portal** | Exploration, small downloads | All |
+| **neonUtilities** | Reproducible pipelines | Bioinformaticist |
+| **API** | Automated workflows | Bioinformaticist |
+| **Biorepository** | Physical samples | Tick Ecologist |
+
+### Recommended Workflow
+
+1. **Scoping** (Architect): Define research questions spanning NEON domains
+2. **Data Discovery** (Curator): Identify relevant data products and coverage
+3. **Ecological Context** (Tick Ecologist): Interpret sampling design and biology
+4. **Data Integration** (Bioinformaticist): Build analysis pipelines
+5. **Clinical Translation** (Clinical Informaticist): Connect to health outcomes
+6. **Public Health Impact** (Public Health Researcher): Policy implications
+
+### Resources
+
+- NEON Science: https://www.neonscience.org/
+- Data Portal: https://data.neonscience.org/
+- Site Map: https://www.neonscience.org/field-sites/explore-field-sites
+- Data Tutorials: https://www.neonscience.org/resources/learning-hub/tutorials
