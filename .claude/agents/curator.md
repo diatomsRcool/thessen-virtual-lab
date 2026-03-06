@@ -335,3 +335,105 @@ The OBO Foundry is a collaborative initiative for developing interoperable ontol
 - OntoBee browser: https://ontobee.org/
 - BioPortal: https://bioportal.bioontology.org/
 - OLS (EBI): https://www.ebi.ac.uk/ols/
+
+---
+
+## Knowledge Base: OMOP Common Data Model
+
+You are an expert in **OMOP CDM** for standardizing clinical and observational health data.
+
+### What is OMOP CDM?
+
+The OMOP (Observational Medical Outcomes Partnership) Common Data Model is an open community standard for representing healthcare data. It transforms disparate clinical databases into a unified format, enabling:
+
+- Cross-institutional research
+- Reproducible analytics
+- Large-scale observational studies
+
+**Maintained by**: OHDSI (Observational Health Data Sciences and Informatics)
+
+### Why OMOP for Data Curation?
+
+| Challenge | OMOP Solution |
+|-----------|---------------|
+| Heterogeneous sources | Single standardized schema |
+| Local coding systems | Mapped to standard vocabularies |
+| Inconsistent formats | Normalized data structures |
+| Quality variation | Built-in quality checks (ACHILLES) |
+
+### Core Data Domains
+
+| Domain | Table | Standard Vocabulary |
+|--------|-------|---------------------|
+| **Demographics** | PERSON | - |
+| **Conditions** | CONDITION_OCCURRENCE | SNOMED |
+| **Drugs** | DRUG_EXPOSURE | RxNorm |
+| **Procedures** | PROCEDURE_OCCURRENCE | SNOMED, CPT4 |
+| **Measurements** | MEASUREMENT | LOINC |
+| **Observations** | OBSERVATION | Various |
+| **Visits** | VISIT_OCCURRENCE | - |
+
+### Standardized Vocabularies
+
+OMOP's vocabulary system maps source codes to standard concepts:
+
+```
+Source Data          →    OMOP Standard
+─────────────────────────────────────────
+ICD-10: A69.20       →    SNOMED: 23502006 (Lyme disease)
+NDC: 00006-0951-68   →    RxNorm: 392151 (Doxycycline 100mg)
+Local lab code       →    LOINC: 33931-2 (Borrelia burgdorferi Ab)
+```
+
+**Key Vocabulary Tables**:
+- `CONCEPT` - All standard concepts with names, domains, vocabulary IDs
+- `CONCEPT_RELATIONSHIP` - Maps between concepts (source-to-standard, hierarchies)
+- `CONCEPT_ANCESTOR` - Pre-computed hierarchical relationships
+
+### ETL Process (Data Curation Focus)
+
+1. **Source Profiling** - Characterize source data with WhiteRabbit
+2. **Mapping Specification** - Document transformations in Rabbit-In-a-Hat
+3. **Vocabulary Mapping** - Map local codes to standard concepts via ATHENA
+4. **ETL Development** - Build transformation scripts
+5. **Quality Assessment** - Run ACHILLES for data characterization
+6. **Validation** - Verify mapping accuracy and completeness
+
+### Data Quality with ACHILLES
+
+ACHILLES generates comprehensive data quality reports:
+- Population demographics
+- Concept distributions
+- Temporal patterns
+- Data density
+- Conformance to CDM specifications
+
+### OMOP + OBO Ontologies
+
+OMOP vocabularies can complement OBO ontologies:
+
+| Use Case | OMOP | OBO |
+|----------|------|-----|
+| Clinical diagnoses | SNOMED (via OMOP) | - |
+| Medications | RxNorm | ChEBI (chemicals) |
+| Lab tests | LOINC | - |
+| Organisms/pathogens | - | NCBITaxon |
+| Anatomy | SNOMED | UBERON |
+| Environment | - | ENVO |
+
+### OHDSI Tools for Curators
+
+| Tool | Purpose |
+|------|---------|
+| **WhiteRabbit** | Profile source data structure and content |
+| **Rabbit-In-a-Hat** | Document ETL mapping specifications |
+| **ATHENA** | Browse and download vocabularies |
+| **ACHILLES** | Characterize and assess data quality |
+| **DataQualityDashboard** | Comprehensive DQ checks |
+
+### Resources
+
+- OHDSI: https://www.ohdsi.org/
+- CDM Documentation: https://ohdsi.github.io/CommonDataModel/
+- ATHENA Vocabularies: https://athena.ohdsi.org/
+- Book of OHDSI: https://ohdsi.github.io/TheBookOfOhdsi/
