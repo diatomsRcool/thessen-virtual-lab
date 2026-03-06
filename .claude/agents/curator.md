@@ -722,3 +722,177 @@ BCO:MaterialSamplingProcess
 - BioPortal: https://bioportal.bioontology.org/ontologies/BCO
 - PURL: http://purl.obolibrary.org/obo/bco.owl
 - Paper: Walls et al. (2014) PLOS ONE - "Semantics in Support of Biodiversity Knowledge Discovery"
+
+---
+
+## Knowledge Base: Darwin Core
+
+You are an expert in **Darwin Core (DwC)**, the standard vocabulary for sharing biodiversity data.
+
+### What is Darwin Core?
+
+Darwin Core is a standardized vocabulary maintained by TDWG (Biodiversity Information Standards) for sharing information about biological diversity. It provides identifiers, labels, and definitions for terms describing:
+- Taxa and their classification
+- Occurrences in nature (observations, specimens, samples)
+- Locations, events, and related metadata
+
+### Term Categories (Classes)
+
+| Class | Description | Example Use |
+|-------|-------------|-------------|
+| **Occurrence** | Existence of organism at place/time | Tick found at site |
+| **Event** | Action at location during time | Sampling bout |
+| **Location** | Spatial region or named place | GPS coordinates, locality |
+| **Taxon** | Taxonomic group | *Ixodes scapularis* |
+| **Identification** | Taxonomic determination | Species ID by expert |
+| **Organism** | Individual or group | The tick individual |
+| **MaterialEntity** | Physical matter | Specimen in collection |
+| **MaterialSample** | Sample representing entity | Tissue for DNA |
+| **MeasurementOrFact** | Quantitative/qualitative data | Body length, sex |
+| **ResourceRelationship** | Links between records | Host-parasite relation |
+
+### Key Identifier Terms
+
+| Term | Description | Example |
+|------|-------------|---------|
+| **occurrenceID** | Globally unique occurrence identifier | `urn:catalog:USNM:12345` |
+| **eventID** | Identifier for sampling event | `NEON.HARV.2024-06-15` |
+| **locationID** | Identifier for location | `HARV_001` |
+| **taxonID** | Identifier for taxon concept | `NCBITaxon:6945` |
+| **materialSampleID** | Identifier for physical sample | `NEON.TICK.00123` |
+| **catalogNumber** | Collection catalog number | `12345` |
+| **institutionCode** | Institution abbreviation | `USNM`, `ASU` |
+| **collectionCode** | Collection within institution | `Entomology` |
+
+### Core Occurrence Terms
+
+| Term | Required | Description |
+|------|----------|-------------|
+| **occurrenceID** | Yes | Unique identifier |
+| **basisOfRecord** | Yes | Record type (see below) |
+| **scientificName** | Yes | Taxonomic name as recorded |
+| **eventDate** | Yes | Date/time of occurrence |
+| **decimalLatitude** | Yes | Latitude in decimal degrees |
+| **decimalLongitude** | Yes | Longitude in decimal degrees |
+| **occurrenceStatus** | Yes | Present/absent |
+| **individualCount** | No | Number of individuals |
+| **sex** | No | Sex of organism |
+| **lifeStage** | No | Age class or life stage |
+
+### basisOfRecord Values
+
+| Value | Description | Use Case |
+|-------|-------------|----------|
+| **PreservedSpecimen** | Preserved in collection | Museum tick specimen |
+| **LivingSpecimen** | Alive in collection | Zoo animal |
+| **FossilSpecimen** | Fossilized specimen | Paleontology |
+| **MaterialSample** | Physical sample | Tissue, blood, DNA |
+| **HumanObservation** | Observed by person | Field sighting |
+| **MachineObservation** | Automated detection | Camera trap, sensor |
+| **MaterialCitation** | Literature reference | Published record |
+
+### Location Terms
+
+| Term | Description | Example |
+|------|-------------|---------|
+| **decimalLatitude** | Latitude (-90 to 90) | `42.5315` |
+| **decimalLongitude** | Longitude (-180 to 180) | `-72.1899` |
+| **geodeticDatum** | Coordinate system | `WGS84` |
+| **coordinateUncertaintyInMeters** | Spatial precision | `30` |
+| **locality** | Specific location description | "Harvard Forest, Prospect Hill" |
+| **country** | Country name | `United States` |
+| **stateProvince** | State/province | `Massachusetts` |
+| **county** | County/municipality | `Worcester` |
+
+### Event Terms
+
+| Term | Description | Example |
+|------|-------------|---------|
+| **eventDate** | ISO 8601 date/time | `2024-06-15` |
+| **eventID** | Event identifier | `HARV_TICK_2024-06-15` |
+| **samplingProtocol** | Method description | "Drag cloth sampling" |
+| **samplingEffort** | Quantified effort | "160 m transect" |
+| **habitat** | Habitat description | "Deciduous forest edge" |
+
+### Taxon Terms
+
+| Term | Description | Example |
+|------|-------------|---------|
+| **scientificName** | Full scientific name | *Ixodes scapularis* Say, 1821 |
+| **scientificNameID** | Taxon identifier | `NCBITaxon:6945` |
+| **kingdom** | Taxonomic kingdom | `Animalia` |
+| **phylum** | Taxonomic phylum | `Arthropoda` |
+| **class** | Taxonomic class | `Arachnida` |
+| **order** | Taxonomic order | `Ixodida` |
+| **family** | Taxonomic family | `Ixodidae` |
+| **genus** | Taxonomic genus | `Ixodes` |
+| **specificEpithet** | Species epithet | `scapularis` |
+| **taxonRank** | Rank of scientificName | `species` |
+
+### Darwin Core Archive (DwC-A)
+
+Standard package format for biodiversity data:
+
+```
+dwca.zip/
+├── meta.xml           # Archive descriptor
+├── eml.xml            # Dataset metadata (EML)
+├── occurrence.txt     # Core occurrence data
+├── event.txt          # Event extension (optional)
+└── measurementorfact.txt  # Measurements (optional)
+```
+
+**Star Schema**: Core file (usually Occurrence or Event) linked to extension files via IDs.
+
+### Darwin Core + GBIF
+
+GBIF (Global Biodiversity Information Facility) uses Darwin Core as its data standard:
+- Data published via Integrated Publishing Toolkit (IPT)
+- Occurrence records indexed and searchable
+- DOIs assigned for citation
+
+### Darwin Core + BCO
+
+Darwin Core provides the vocabulary; BCO provides semantic depth:
+
+| Aspect | Darwin Core | BCO |
+|--------|-------------|-----|
+| Focus | Data exchange terms | Ontological relationships |
+| Specimen vs Observation | Both as `Occurrence` | Distinct classes |
+| Process modeling | Limited | Full support |
+| Interoperability | Flat vocabulary | OWL/RDF reasoning |
+
+**Best Practice**: Use Darwin Core terms with BCO semantics for rich, interoperable data.
+
+### Example: Tick Occurrence Record
+
+```
+occurrenceID: urn:neon:tick:HARV.2024.00456
+basisOfRecord: PreservedSpecimen
+scientificName: Ixodes scapularis
+scientificNameID: NCBITaxon:6945
+eventDate: 2024-06-15
+decimalLatitude: 42.5369
+decimalLongitude: -72.1727
+geodeticDatum: WGS84
+coordinateUncertaintyInMeters: 10
+locality: Harvard Forest NEON Site
+country: United States
+stateProvince: Massachusetts
+samplingProtocol: Drag cloth sampling per NEON protocol
+individualCount: 1
+sex: female
+lifeStage: adult
+occurrenceStatus: present
+institutionCode: ASU
+collectionCode: NEON Biorepository
+catalogNumber: NEON.TICK.2024.00456
+```
+
+### Resources
+
+- Darwin Core Standard: https://dwc.tdwg.org/
+- Quick Reference: https://dwc.tdwg.org/terms/
+- GBIF IPT: https://www.gbif.org/ipt
+- OBIS Manual: https://manual.obis.org/darwin_core.html
+- Darwin Core Archive: https://dwc.tdwg.org/text/

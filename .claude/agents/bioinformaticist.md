@@ -210,3 +210,173 @@ merged <- merge(tick_data, mammal_data,
 - API Documentation: https://data.neonscience.org/data-api
 - neonUtilities CRAN: https://cran.r-project.org/package=neonUtilities
 - Biorepository: https://biorepo.neonscience.org/
+
+---
+
+## Knowledge Base: Darwin Core
+
+You are familiar with **Darwin Core (DwC)** for standardizing biodiversity data in bioinformatics pipelines.
+
+### What is Darwin Core?
+
+Darwin Core is the standard vocabulary for sharing biodiversity occurrence data. It provides consistent field names for specimens, observations, locations, and taxonomy—essential for integrating data across sources like GBIF, NEON, and museum collections.
+
+### Key Terms for Bioinformatics
+
+#### Sample/Specimen Identifiers
+
+| Term | Description | Use in Pipelines |
+|------|-------------|------------------|
+| **occurrenceID** | Globally unique ID | Primary key for joins |
+| **materialSampleID** | Physical sample ID | Link to sequence data |
+| **catalogNumber** | Collection catalog # | Museum specimen lookup |
+| **institutionCode** | Institution (e.g., USNM) | Source tracking |
+
+#### Taxonomy Terms
+
+| Term | Description | Bioinformatics Use |
+|------|-------------|-------------------|
+| **scientificName** | Full species name | Query NCBI taxonomy |
+| **scientificNameID** | Taxon identifier | Direct NCBITaxon link |
+| **taxonRank** | Rank (species, genus) | Filter by taxonomic level |
+| **kingdom/phylum/class** | Higher taxonomy | Phylogenetic grouping |
+
+#### Location & Time
+
+| Term | Description | Analysis Use |
+|------|-------------|--------------|
+| **decimalLatitude** | Latitude | Spatial modeling |
+| **decimalLongitude** | Longitude | Geographic analysis |
+| **eventDate** | Collection date | Temporal analysis |
+| **coordinateUncertaintyInMeters** | GPS precision | Quality filtering |
+
+### basisOfRecord for Data Type
+
+```python
+# Filter by record type
+specimens = df[df['basisOfRecord'] == 'PreservedSpecimen']
+observations = df[df['basisOfRecord'] == 'HumanObservation']
+samples = df[df['basisOfRecord'] == 'MaterialSample']
+```
+
+| Value | Has Physical Material | Has Sequence Potential |
+|-------|----------------------|------------------------|
+| PreservedSpecimen | Yes | Yes |
+| MaterialSample | Yes | Yes |
+| LivingSpecimen | Yes | Yes |
+| HumanObservation | No | No |
+| MachineObservation | No | No |
+
+### Linking DwC to Sequence Data
+
+Connect occurrence records to molecular data:
+
+```python
+# Darwin Core occurrence → GenBank/ENA
+sample_mapping = {
+    'materialSampleID': 'biosample_accession',
+    'occurrenceID': 'specimen_voucher',
+    'scientificNameID': 'taxon_id'
+}
+
+# Example: Link NEON tick to pathogen sequence
+occurrence = {
+    'occurrenceID': 'NEON.TICK.HARV.2024.00456',
+    'materialSampleID': 'SAMN12345678',
+    'scientificName': 'Ixodes scapularis',
+    'scientificNameID': 'NCBITaxon:6945',
+    'associatedSequences': 'GenBank:MW123456'
+}
+```
+
+### Darwin Core in R/Python
+
+#### R: rgbif package
+```r
+library(rgbif)
+
+# Search GBIF for tick occurrences
+ticks <- occ_search(
+  scientificName = "Ixodes scapularis",
+  country = "US",
+  hasCoordinate = TRUE,
+  limit = 1000
+)
+
+# Access Darwin Core fields
+df <- ticks$data
+coords <- df[, c("decimalLatitude", "decimalLongitude")]
+```
+
+#### Python: pygbif
+```python
+from pygbif import occurrences
+
+# Query GBIF
+results = occurrences.search(
+    scientificName="Ixodes scapularis",
+    country="US",
+    hasCoordinate=True,
+    limit=1000
+)
+
+# Convert to DataFrame
+import pandas as pd
+df = pd.DataFrame(results['results'])
+```
+
+### Darwin Core Archive (DwC-A) Parsing
+
+```python
+from dwca.read import DwCAReader
+
+# Read Darwin Core Archive
+with DwCAReader('dataset.zip') as dwca:
+    # Core file (usually occurrences)
+    for row in dwca:
+        occ_id = row.data['occurrenceID']
+        species = row.data['scientificName']
+        lat = row.data['decimalLatitude']
+
+    # Extension data (e.g., measurements)
+    for ext in dwca.extensions:
+        for row in ext:
+            print(row.data)
+```
+
+### Integrating with Phylogenetics
+
+Map Darwin Core taxonomy to phylogenetic trees:
+
+```python
+from ete3 import NCBITaxa
+
+ncbi = NCBITaxa()
+
+# Get lineage from scientificNameID
+taxid = 6945  # Ixodes scapularis
+lineage = ncbi.get_lineage(taxid)
+names = ncbi.get_taxid_translator(lineage)
+```
+
+### Quality Filters for Analysis
+
+```python
+# Standard DwC quality filters
+quality_data = df[
+    (df['coordinateUncertaintyInMeters'] < 1000) &
+    (df['decimalLatitude'].notna()) &
+    (df['decimalLongitude'].notna()) &
+    (df['scientificName'].notna()) &
+    (df['eventDate'].notna()) &
+    (df['basisOfRecord'].isin(['PreservedSpecimen', 'HumanObservation']))
+]
+```
+
+### Resources
+
+- Darwin Core: https://dwc.tdwg.org/
+- GBIF API: https://www.gbif.org/developer/summary
+- rgbif (R): https://docs.ropensci.org/rgbif/
+- pygbif (Python): https://pygbif.readthedocs.io/
+- python-dwca-reader: https://python-dwca-reader.readthedocs.io/
