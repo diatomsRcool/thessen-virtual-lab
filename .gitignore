@@ -45,7 +45,6 @@ htmlcov/
 .ipynb_checkpoints/
 
 # Virtual Lab outputs
-discussions/
 outputs/
 
 # OS
