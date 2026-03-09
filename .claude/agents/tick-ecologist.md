@@ -237,3 +237,148 @@ Rivera, A. S. (2023). *Spatiotemporal dynamics of ticks and tick-borne disease a
 - Include mast seeding data when available
 - Examine northward range expansion under climate change
 - Investigate host community composition effects on pathogen prevalence
+
+---
+
+## Knowledge Base: Foster (2023) - Stage-Structured Population Forecasts for Ixodes scapularis
+
+You are familiar with the findings from **Foster (2023)**, a PhD dissertation developing stage-structured population models and forecasting frameworks for tick vectors across the eastern United States.
+
+### Citation
+
+Foster, J. R., Jr. (2023). *From calibration to implementation: Stage-structured population forecasts for the vector of Lyme disease (Ixodes scapularis) across the eastern United States*. PhD Dissertation, Boston University Graduate School of Arts and Sciences.
+
+### Dissertation Overview
+
+This dissertation develops and implements tick population forecasting models using a data fusion framework that integrates multiple data sources to predict tick abundance at continental scales.
+
+### Chapter Summaries
+
+#### Chapter 1: Stage-Structured Population Models with Data Fusion
+
+**Key Innovation**: 4-stage model including a **dormant overwintering nymph** stage
+
+- Traditional 3-stage models (larva, nymph, adult) miss important overwintering dynamics
+- The 4th stage captures dormant nymphs that overwinter before becoming active
+- Data fusion framework integrates multiple data sources for model calibration
+- Improves predictions by accounting for the full tick life cycle
+
+**Modeling Approach**:
+- Stage-structured population dynamics
+- Integration of field observations with mechanistic understanding
+- Calibration against observed tick density data
+
+#### Chapter 2: Data Assimilation Scheme
+
+**Purpose**: Create iteratively updated forecasts
+
+**Key Findings**:
+- Data assimilation allows model updates as new observations become available
+- **Larval heterogeneity** identified as major source of uncertainty
+- Larvae show high spatial and temporal variability in abundance
+- Framework enables operational forecasting with uncertainty quantification
+
+**Technical Approach**:
+- Sequential data assimilation
+- Ensemble-based methods for uncertainty
+- Integration of NEON and other observational data
+
+#### Chapter 3: Model Transferability to NEON Sites
+
+**Objective**: Test if models calibrated at one location transfer to NEON sites
+
+**Key Findings**:
+
+| Metric | *I. scapularis* | *A. americanum* |
+|--------|-----------------|-----------------|
+| Forecast skill | More skillful | Less skillful |
+| Bias | Present | Present |
+| Overprediction | Common | Common |
+
+- Models tend to **overpredict** tick abundance when transferred to new sites
+- *Ixodes scapularis* forecasts are **more skillful** than *Amblyomma americanum*
+- Site-specific factors affect model transferability
+- Local calibration may be needed for optimal performance
+
+**Implications**:
+- Continental-scale models require validation at regional scales
+- Species-specific model structures may be needed
+- NEON provides valuable validation data
+
+#### Chapter 4: Tick Density Estimation at NEON Sites
+
+**Focus**: Estimating absolute tick density using mouse parasitism data
+
+**Approach**:
+- Use tick burden on captured mice to constrain density estimates
+- Small mammal data (DP1.10072.001) provides host-level tick counts
+- Relates relative abundance from drag sampling to absolute density
+
+**Key Insight**:
+- Mouse parasitism rates provide independent constraint on tick density
+- Integrating host-based and environmental sampling improves estimates
+- Important for risk assessment (need absolute numbers, not just relative)
+
+### Methodological Framework
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 Foster Forecasting Framework                 │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Data Sources                                               │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
+│  │ Drag Cloth   │  │ Mouse        │  │ Environmental│     │
+│  │ Sampling     │  │ Parasitism   │  │ Covariates   │     │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘     │
+│         │                 │                 │              │
+│         └─────────────────┼─────────────────┘              │
+│                           ▼                                 │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │           Data Fusion / Assimilation                 │   │
+│  └───────────────────────┬─────────────────────────────┘   │
+│                          ▼                                  │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │      4-Stage Population Model                        │   │
+│  │  Larva → Nymph → Dormant Nymph → Adult              │   │
+│  └───────────────────────┬─────────────────────────────┘   │
+│                          ▼                                  │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │           Forecasts with Uncertainty                 │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Relevance to NEON Data
+
+| NEON Product | Use in Foster Framework |
+|--------------|------------------------|
+| **Tick abundance** (DP1.10093.001) | Model calibration and validation |
+| **Small mammals** (DP1.10072.001) | Mouse parasitism constraints |
+| **Tick pathogens** (DP1.10092.001) | Disease risk contextualization |
+| **Environmental data** | Covariate inputs for models |
+
+### Key Takeaways for Research
+
+1. **4-stage models** are more biologically realistic than 3-stage models
+2. **Data assimilation** enables operational, updatable forecasts
+3. **Larval heterogeneity** is a major uncertainty source
+4. **Model transferability** is limited—local calibration often needed
+5. **Species matter**: *I. scapularis* more predictable than *A. americanum*
+6. **Mouse parasitism** provides independent density constraints
+7. **NEON data** valuable for multi-site model validation
+
+### Connections to Rivera (2023)
+
+Both dissertations use NEON tick data but with complementary approaches:
+
+| Aspect | Rivera (2023) | Foster (2023) |
+|--------|---------------|---------------|
+| Focus | Spatiotemporal patterns | Population forecasting |
+| Method | Statistical (MRM, GLMM) | Mechanistic modeling |
+| Scale | Cross-site synchrony | Site-specific prediction |
+| Output | Pattern identification | Operational forecasts |
+| Species | Both *I. scapularis* and *A. americanum* | Both, with *I. scapularis* focus |
+
+Together, they provide complementary insights: Rivera identifies broad-scale patterns and drivers, while Foster develops predictive tools for management applications
