@@ -381,4 +381,248 @@ Both dissertations use NEON tick data but with complementary approaches:
 | Output | Pattern identification | Operational forecasts |
 | Species | Both *I. scapularis* and *A. americanum* | Both, with *I. scapularis* focus |
 
-Together, they provide complementary insights: Rivera identifies broad-scale patterns and drivers, while Foster develops predictive tools for management applications
+Together, they provide complementary insights: Rivera identifies broad-scale patterns and drivers, while Foster develops predictive tools for management applications.
+
+---
+
+## Knowledge Base: Foster et al. (2025) - Iterative Tick Forecasting System
+
+You are familiar with the findings from **Foster et al. (2025)**, a bioRxiv preprint developing an operational iterative forecasting system for black-legged tick populations.
+
+### Citation
+
+Foster, J. R., LaDeau, S. L., Ostfeld, R. S., & Dietze, M. C. (2025). Incorporating weather and host abundance in an iterative subseasonal-to-interannual ecological forecast system for *Ixodes scapularis*, the vector of Lyme disease. *bioRxiv*. https://doi.org/10.1101/2025.10.02.677385
+
+### Study Overview
+
+This study implements the stage-structured model from Foster et al. (2024) in an iterative Bayesian forecasting framework, evaluating tick predictability from near-term to interannual (12-month) scales at the Cary Institute of Ecosystem Studies in New York.
+
+### Key Innovation: Iterative Data Assimilation
+
+**Forecast-Analysis Cycle**:
+1. **Forecast step**: Project tick abundance forward 365 days
+2. **Analysis step**: Assimilate new tick drag data when collected
+3. **Update**: Refine both state estimates and model parameters
+4. **Repeat**: Use updated posteriors for next forecast
+
+This allows the model to adaptively learn about climate-driven shifts in demographic parameters over time.
+
+### Data Sources
+
+| Data Type | Source | Use |
+|-----------|--------|-----|
+| **Tick drags** | Cary Institute (1995-2021) | Calibration and validation |
+| **Mouse abundance** | Mark-recapture at Cary | Host dynamics covariate |
+| **Observed weather** | Cary meteorological station | Known weather driver |
+| **Forecasted weather** | NMME (2018-2021) | Climate forecast driver |
+
+**NMME** = North American Multi-Model Ensemble: 12-month weather forecast with 10 ensemble members at 1° resolution.
+
+### Key Findings
+
+#### Weather Impacts on Tick Survival
+
+| Variable | Effect on Nymph Survival | Change Over Time |
+|----------|-------------------------|------------------|
+| **Max Temperature** | Negative (reduces survival) | Became dominant predictor |
+| **Max Relative Humidity** | Negative | Effect decreased |
+| **Min Relative Humidity** | Minimal effect | Stable |
+| **Precipitation** | Positive (increases survival) | Effect decreased |
+
+**Key insight**: Daily maximum temperature displaced humidity as the strongest predictor as the iterative forecast evolved, suggesting the model "learned" more accurate climate-tick relationships.
+
+#### Forecast Skill vs Day-of-Year Null
+
+| Period | Process Model Performance |
+|--------|---------------------------|
+| **Peak questing season** | Outperformed null by up to 15 ticks/drag |
+| **Dormant season** | Null model performed better |
+
+The process model excels when ticks are active and disease risk is highest.
+
+#### Forecast Limits (Lead Time Until Null Outperforms)
+
+| Time Scale | Mice + Larvae | Mice Only | No Mice |
+|------------|---------------|-----------|---------|
+| **Subannual** (observed weather) | 65 days | 69 days | 76-78 days |
+| **Subannual** (NMME) | 52 days | 56 days | 29-31 days |
+| **Interannual** (observed weather) | >365 days | >365 days | >365 days |
+| **Interannual** (NMME) | 352 days | >365 days | 295-296 days |
+
+#### Data Inclusion Experiments
+
+**Mouse Data**:
+- Including mouse abundance increased forecast limit by 23-69 days when using NMME
+- Mouse data critical for maintaining skill at interannual scales
+- Mice remove ticks from questing pool (current year effect)
+- Prior year mouse abundance affects subsequent nymph emergence
+
+**Larval Data**:
+- Removing larval data had **minimal effect** on nymph predictability
+- Suggests demographic forcing from larvae to nymph is minimal
+- **Recommendation**: Redirect larval monitoring effort to more thorough nymph sampling
+
+**Weather Data**:
+- Short-term forecasts with observed weather outperform NMME-driven forecasts
+- At interannual scales, NMME still provides useful predictive skill
+- Population dynamics driven by climate variations at interannual scales, weather variations at subannual scales
+
+### Forecast Skill Assessment
+
+**Metric**: Continuous Ranked Probability Score (CRPS)
+- Measures both accuracy (error magnitude) and precision (ensemble spread)
+- Lower CRPS = more skillful forecast
+- Same units as response variable (ticks/drag)
+
+### Implications for Monitoring
+
+1. **Prioritize nymph observations** - greatest reduction in forecast uncertainty
+2. **Larval sampling may be deprioritized** for forecasting purposes
+3. **Mouse monitoring valuable** especially when using climate forecasts
+4. **More frequent nymph sampling** could improve initial condition estimates
+
+### Model Transferability
+
+- No appreciable difference between within-site and across-site forecasts
+- Process-based forecasts more skillful than null model both within and across sites
+- Suggests model structure is generalizable to other locations
+
+### Future Directions Identified
+
+1. Develop mouse abundance forecasts (based on acorn production)
+2. Combine NMME with short-term weather forecasts (e.g., 35-day NOAA GEFS)
+3. Expand to other locations and species
+4. Operationalize for public use
+5. Include management intervention scenarios
+
+### Connection to Other Work
+
+This study bridges:
+- **Foster (2023) dissertation**: Theoretical framework and model development
+- **Foster et al. (2024) Ecosphere**: Model calibration and validation
+- **Foster et al. (2025) bioRxiv**: Operational forecasting implementation
+
+---
+
+## Knowledge Base: Alkishe et al. (2024) - Ecological Niches of Tick-Borne Pathogens
+
+You are familiar with the findings from **Alkishe et al. (2024)**, a study examining whether tick-borne pathogens occupy distinct ecological niches from their tick vectors.
+
+### Citation
+
+Alkishe, A., Cobos, M. E., & Peterson, A. T. (2024). Broad-scale ecological niches of pathogens vectored by the ticks *Ixodes scapularis* and *Amblyomma americanum* in North America. *PeerJ*, 12:e17944. https://doi.org/10.7717/peerj.17944
+
+### Study Overview
+
+- **Data Source**: NEON tick collections (2014-2020)
+- **Sites**: 59 sites for *A. americanum*, 39 sites for *I. scapularis*
+- **Sample Sizes**: 71,113 *A. americanum*; 16,800 *I. scapularis*
+- **Question**: Do pathogens show environmental preferences beyond those of their tick hosts?
+
+### Environmental Variables
+
+- Minimum temperature
+- Maximum vapor pressure deficit
+- Minimum vapor pressure deficit
+- Source: PRISM climate data at 4 km resolution
+
+### Statistical Methods
+
+1. **PERMANOVA** - Detect overall niche differences
+2. **Non-parametric univariate analyses** - Randomization/resampling (1,000 samples)
+3. Assess pathogen niche position and breadth relative to tick vector
+
+### Key Findings
+
+#### Pathogens in *Amblyomma americanum* (3 pathogens)
+
+| Pathogen | Univariate Signal | PERMANOVA Signal |
+|----------|-------------------|------------------|
+| *Borrelia lonestari* | Nonrandom distribution | Not significant |
+| *Ehrlichia chaffeensis* | Nonrandom distribution | Not significant |
+| *Ehrlichia ewingii* | Nonrandom distribution | **Significant** |
+
+#### Pathogens in *Ixodes scapularis* (6 pathogens)
+
+| Pathogen | PERMANOVA | Niche vs Vector |
+|----------|-----------|-----------------|
+| *Babesia microti* | **Significant** | Narrower than vector |
+| *Borrelia burgdorferi* s.l. | **Significant** | Broader than vector |
+| *Borrelia miyamotoi* | Not significant | No distinction |
+| Other pathogens | Variable | - |
+
+### Implications
+
+1. **Pathogens have environmental requirements that diverge from their vectors**
+2. **Disease prevalence may not align with tick distribution** - explains geographic patterns
+3. ***B. burgdorferi* avoids arid conditions** - may explain lower Lyme incidence in warm southern regions despite vector presence
+4. **NEON provides critical data** - standardized sampling with known absences enables these analyses
+
+### Relevance to NEON-Based Research
+
+- Demonstrates value of continental-scale, consistently-sampled datasets
+- Known absences (negative samples) are as important as positive detections
+- Pathogen testing data (DP1.10092.001) enables niche modeling beyond just tick abundance
+
+---
+
+## Knowledge Base: Foster et al. (2024) - Modified Matrix Model for Tick Population Dynamics
+
+You are familiar with the findings from **Foster et al. (2024)**, the Ecosphere paper establishing the stage-structured population model used in subsequent forecasting work.
+
+### Citation
+
+Foster, J. R., LaDeau, S. L., Oggenfuss, K., Ostfeld, R. S., & Dietze, M. C. (2024). A modified matrix model captures the population dynamics for the primary vector of Lyme disease in North America. *Ecosphere*, 15(10): e70022. https://doi.org/10.1002/ecs2.70022
+
+### Study Overview
+
+Develops and validates a stage-structured population model for *Ixodes scapularis* that accounts for:
+- Field sampling design
+- Abiotic drivers (temperature, humidity, precipitation)
+- Biotic drivers (host abundance)
+
+### Key Model Innovation: 4-Stage Structure
+
+**Traditional 3-stage models**: Larva → Nymph → Adult
+
+**Modified 4-stage model**: Larva → **Dormant Nymph** → Questing Nymph → Adult
+
+The inclusion of the dormant overwintering nymph stage **improved model accuracy and predictive capacity**.
+
+### Model Components
+
+| Parameter | Description | Driver |
+|-----------|-------------|--------|
+| φ₁ | Larval survival | Daily weather |
+| φ₂ | Nymph survival | Daily weather |
+| φ₃ | Adult survival | Daily weather |
+| θ₁ | Larva → Dormant nymph transition | Host abundance |
+| θ₂ | Dormant → Questing nymph transition | Phenology (GDD) |
+| θ₃ | Questing nymph → Adult transition | Host abundance |
+| λ | Reproduction | - |
+
+### Key Findings
+
+1. **4-stage model outperforms 3-stage model** - dormant nymph state is critical
+2. **Model accurately predicted all three questing stages** at validation sites
+3. **Model is transferable** - calibrated at one site, validated at different sites
+4. **Initial condition uncertainty is dominant** - uncertainty in knowing current tick abundance is the main source of forecast uncertainty during nymph questing season
+
+### Implications for Monitoring
+
+- **Prioritize nymph sampling** during peak activity to reduce initial condition uncertainty
+- Sampling effort should target periods when nymphs are most active
+- Has implications for NEON and other monitoring programs regarding when and where to sample
+
+### Data and Methods
+
+- **Site**: Cary Institute of Ecosystem Studies (1995-2005 for calibration)
+- **Analysis**: Bayesian state-space model using NIMBLE
+- **Variance partitioning**: Identified sources of forecast uncertainty
+- **Validation**: 11 years of tick and host data from northeastern US
+
+### Connection to Forecasting Papers
+
+This paper provides the foundational model structure for:
+- **Foster (2023)**: Extended to NEON sites (dissertation Chapter 3)
+- **Foster et al. (2025)**: Implemented in iterative forecasting system
